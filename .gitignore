@@ -31,4 +31,5 @@
 *.out
 *.app
 
-./third_party/raylib/*
+# Directories
+third_party/raylib/
