@@ -31,4 +31,4 @@
 *.out
 *.app
 
-./third_party/raylib
+./third_party/raylib/*
