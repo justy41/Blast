@@ -32,4 +32,5 @@
 *.app
 
 # Directories
+out/build/
 third_party/raylib/
