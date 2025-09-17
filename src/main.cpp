@@ -10,6 +10,8 @@
 #include "scenes/start_scene.h"
 #include "scenes/next_scene.h"
 
+// Draws the game in a "letter box" resolution.
+// It is using a RenderTexture2D and scales it up so that it keeps the aspect ratio.
 inline void DrawLetterBox(RenderTexture2D target, float scale, int gameW, int gameH) {
     BeginDrawing();
         ClearBackground(BLACK);
