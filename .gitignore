@@ -32,5 +32,5 @@
 *.app
 
 # Directories
-out/build/Visual Studio Community 2022 Release - amd64/
+out/build/
 third_party/raylib/
