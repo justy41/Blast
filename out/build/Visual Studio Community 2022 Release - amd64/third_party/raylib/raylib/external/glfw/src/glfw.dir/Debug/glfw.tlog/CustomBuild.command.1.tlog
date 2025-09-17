@@ -1,0 +1,10 @@
+^C:\USERS\IUSTIN\DOCUMENTS\PROJECTS\_C++\COMPONENT_SYSTEM\THIRD_PARTY\RAYLIB\SRC\EXTERNAL\GLFW\SRC\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Iustin/Documents/PROJECTS/_C++/component_system "-BC:/Users/Iustin/Documents/PROJECTS/_C++/component_system/out/build/Visual Studio Community 2022 Release - amd64" --check-stamp-file "C:/Users/Iustin/Documents/PROJECTS/_C++/component_system/out/build/Visual Studio Community 2022 Release - amd64/third_party/raylib/raylib/external/glfw/src/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
