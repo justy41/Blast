@@ -108,6 +108,7 @@ public:
     std::unordered_map<std::string, std::unique_ptr<GameObject>> gameobjects;
     std::unordered_map<std::string, GameObject*> gameobjects_to_remove;
     int index = 0;
+    bool debug_mode = false;
     SceneManager* manager;
     
     Scene() {
