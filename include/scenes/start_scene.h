@@ -8,6 +8,7 @@
 #include "engine.h"
 #include "components/transform_component.h"
 #include "components/sprite_renderer.h"
+#include "components/rigidbody2d.h"
 
 class StartScene : public Scene {
 private:
@@ -20,6 +21,7 @@ public:
         player = create_gameobject("player");
         player->add_component(new TransformComponent(0, 0, 0, 1, 1));
         player->add_component(new SpriteRenderer(RESOURCES_PATH "cat.png"));
+        player->add_component(new Rigidbody2D(0, 0, 0));
         
         Scene::start();
     }
