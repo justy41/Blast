@@ -13,6 +13,7 @@
 #include "game_scripts/player_movement.h"
 #include "components/ldtk_world_component.h"
 
+// TODO: add ldtk map collisions to work on entities (copy from spade.h file)
 class StartScene : public Scene {
 private:
 public:
