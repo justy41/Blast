@@ -24,14 +24,14 @@ public:
     // Note: initilize all the variables in here
     void start() override {
         player = create_gameobject("player");
-        player->add_component(new TransformComponent(0, 0, 0, 1, 1));
+        player->add_component(new TransformComponent(120, 50, 0, 1, 1));
         player->add_component(new BoxCollider2D(16, 16));
         player->add_component(new SpriteRenderer(RESOURCES_PATH "cat.png"));
         player->add_component(new Rigidbody2D(0, 0, 0));
         player->add_component(new PlayerMovement(180, 500));
         
         other_object = create_gameobject("other_object");
-        other_object->add_component(new TransformComponent(-100, -100, 0, 1, 1));
+        other_object->add_component(new TransformComponent(200, 60, 0, 1, 1));
         other_object->add_component(new BoxCollider2D(16, 16));
         other_object->add_component(new SpriteRenderer(RESOURCES_PATH "bird.png"));
         
@@ -61,5 +61,6 @@ public:
         ClearBackground(YELLOW);
         Scene::draw();
         ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map();
+        // ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers();
     }
 };

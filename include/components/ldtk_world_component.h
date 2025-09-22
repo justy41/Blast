@@ -20,6 +20,10 @@ public:
     std::unordered_map<std::pair<float, float>, bool, FloatPairHash> collisions_layer;
     std::unordered_map<std::string, Rectangle> entities;
     
+    /// @brief Loads a LDtk map
+    /// @param tilemap_path the path to the *.ldtk file
+    /// @param fixed_tile_size the fixed tile size (it is necessary to be fixed)
+    /// @param collision_layer_names a std::string vector of names of the collision layers from the ldtk project (e.g. {"Ground", "Snow"})
     LDtkWorldComponent(const char* tilemap_path, float fixed_tile_size, std::vector<std::string> collision_layer_names);
     void start() override;
     void update(float deltaTime) override;
@@ -31,6 +35,6 @@ public:
     void draw_ldtk_level(const char* level_name);
     // Draws a layer from all levels (exception is entities layer)
     void draw_ldtk_layer(const char* layer_name);
-    // Toggle the LDtk map collision hitboxes if F6 key is pressed
+    // Toggle the LDtk map collision hitboxes if F10 key is pressed
     void draw_ldtk_collision_layers();
 };
