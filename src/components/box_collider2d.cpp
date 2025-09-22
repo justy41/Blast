@@ -26,6 +26,19 @@ void BoxCollider2D::update(float deltaTime) {
     rect.x = transform->position.x + rel_position.x;
     rect.y = transform->position.y + rel_position.y;
     
+    for(auto& [name, obj] : gameobject->scene->gameobjects) {
+        if(obj != nullptr && gameobject != obj.get() && obj->has_component<BoxCollider2D>()) {
+            if(CheckCollisionRecs(rect, obj->get_component<BoxCollider2D>()->rect)) {
+                for(auto& [_, comp] : gameobject->components) {
+                    comp->on_collision_enter_2d(obj.get());
+                }
+                for(auto& [_, comp] : obj->components) {
+                    comp->on_collision_enter_2d(gameobject);
+                }
+            }
+        }
+    }
+    
     if(IsKeyPressed(KEY_F10)) gameobject->scene->debug_mode = !gameobject->scene->debug_mode;
 }
 

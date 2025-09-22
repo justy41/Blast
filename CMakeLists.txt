@@ -11,11 +11,12 @@ file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sr
 file(GLOB_RECURSE HEADER_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 add_subdirectory("third_party/raylib")
+add_subdirectory("third_party/ldtk")
 add_subdirectory("third_party/imgui")
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib imgui)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib imgui LDtkLoader::LDtkLoader)
 
 # copies the assets folder relative to the CMakeLists.txt file to the folder relative to the "out/build/GCC..." path
 file(COPY "assets" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/Debug")

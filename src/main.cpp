@@ -43,8 +43,8 @@ int main() {
     // Camera
     Camera2D camera = { 0 };
     camera.target = Vector2{0, 0};
-    camera.offset = Vector2{(float)gameW/2.f, (float)gameH/2.f};
-    //camera.offset = Vector2{0, 0};
+    // camera.offset = Vector2{(float)gameW/2.f, (float)gameH/2.f};
+    camera.offset = Vector2{0, 0};
     camera.rotation = 0;
     camera.zoom = 1.0f;
     

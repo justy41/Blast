@@ -11,7 +11,7 @@ void Rigidbody2D::start() {
 
 void Rigidbody2D::update(float deltaTime) {
     if(transform != nullptr) {
-        transform->position.x += velocity.x;
-        transform->position.y += velocity.y;
+        transform->position.x += velocity.x * deltaTime;
+        transform->position.y += velocity.y * deltaTime;
     }
 }

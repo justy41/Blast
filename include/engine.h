@@ -9,6 +9,14 @@
 #include <typeindex>
 #include <typeinfo>
 
+struct FloatPairHash {
+    std::size_t operator()(const std::pair<float, float>& p) const {
+        std::size_t h1 = std::hash<float>{}(p.first);
+        std::size_t h2 = std::hash<float>{}(p.second);
+        return h1 ^ (h2 << 1);
+    }
+};
+
 class SceneManager;
 class Scene;
 class GameObject;
@@ -23,6 +31,7 @@ public:
     virtual void start() {}
     virtual void update(float deltaTime) {}
     virtual void draw() {}
+    virtual void on_collision_enter_2d(GameObject* other) {}
     virtual ~Component() = default;
 };
 
@@ -86,6 +95,18 @@ public:
         }
         else {
             return nullptr;
+        }
+    }
+    
+    template<typename T>
+    bool has_component() {
+        std::type_index ti(typeid(T));
+        auto it = components.find(ti);
+        if(it != components.end()) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
     
@@ -201,6 +222,10 @@ public:
             }
         }
     }
+    
+    // ############################################### LDtk ############################################### //
+    
+    // #################################################################################################### //
 };
 
 class SceneManager {
