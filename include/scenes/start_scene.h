@@ -13,7 +13,7 @@
 #include "game_scripts/player_movement.h"
 #include "components/ldtk_world_component.h"
 
-// TODO: add ldtk map collisions to work on entities (copy from spade.h file)
+// TODO: add a camera to be able to follow the player.
 class StartScene : public Scene {
 private:
 public:
