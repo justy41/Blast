@@ -37,6 +37,7 @@ public:
     void draw_ldtk_layer(const char* layer_name);
     // Toggle the LDtk map collision hitboxes if F10 key is pressed
     void draw_ldtk_collision_layers();
+    Rectangle getLDtkEntity(std::string Name_field);
     
     std::vector<Vector2> tiles_around(Vector2 pos, float tile_size, std::unordered_map<std::pair<float, float>, bool, FloatPairHash> collisions_layer);
     std::vector<Rectangle> physics_rects_around(Vector2 pos);

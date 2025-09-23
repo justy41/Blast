@@ -141,6 +141,15 @@ void LDtkWorldComponent::draw_ldtk_collision_layers() {
     }
 }
 
+Rectangle LDtkWorldComponent::getLDtkEntity(std::string Name_field) {
+    Rectangle rect = Rectangle{0, 0, 0, 0};
+    if(entities[Name_field].width != 0) {
+        rect = Rectangle{entities[Name_field].x, entities[Name_field].y, entities[Name_field].width, entities[Name_field].height};
+        return rect;
+    }
+    return rect;
+}
+
 // ############################################### LDTK MAP COLLISIONS ############################################### //
 
 // Function that returns the tiles around the player.

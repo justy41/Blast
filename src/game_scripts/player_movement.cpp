@@ -9,6 +9,8 @@ PlayerMovement::PlayerMovement(float speed, float acc, float jump_force) {
 void PlayerMovement::start() {
     transform = gameobject->get_component<TransformComponent>();
     rb = gameobject->get_component<Rigidbody2D>();
+    collider = gameobject->get_component<BoxCollider2D>();
+    
     initial_gravity = rb->gravity;
 }
 
@@ -24,30 +26,33 @@ void PlayerMovement::update(float deltaTime) {
             rb->velocity.x = MoveTowards(rb->velocity.x, 0, acc*deltaTime);
         }
         
-        if(IsKeyDown(KEY_DOWN)) {
-            rb->velocity.y = MoveTowards(rb->velocity.y, speed, acc*deltaTime);
-        }
-        else if(IsKeyDown(KEY_UP)) {
-            rb->velocity.y = MoveTowards(rb->velocity.y, -speed, acc*deltaTime);
-        }
-        else {
-            rb->velocity.y = MoveTowards(rb->velocity.y, 0, acc*deltaTime);
-        }
-        
-        if(rb->velocity.y < 0) {
-            rb->gravity = 0;
+        if(collider->collisions["down"]) {
+            rb->gravity = 1; // Dont make this 0 or the "down" collision check will jumble up.
+                             // It's usually good to keep it 1 as it still pushes the gameobject a bit into the ground.
+            
+            std::cout<<true;
+            if(IsKeyPressed(KEY_Z)) {
+                rb->velocity.y = -jump_force;
+            }
         }
         else {
-            rb->gravity = initial_gravity;
-        }
-        
-        if(IsKeyPressed(KEY_Z)) {
-            rb->velocity.y = -jump_force;
+            std::cout<<false;
+            if(rb->velocity.y < 0) { // If not on ground and moving up (positive y goes down).
+                rb->gravity = initial_gravity;
+                
+                if(IsKeyReleased(KEY_Z)) {
+                    rb->velocity.y /= 2; // Cut the jump in 2 if releasing the button mid ascend.
+                }
+            }
+            else {
+                rb->gravity = initial_gravity * 2; // When falling apply a multiplier to make the fall faster. Feels better.
+            }
         }
     }
 }
 
 void PlayerMovement::on_collision_enter_2d(GameObject* other) {
+    // Checking if the other object we collided with is named "other_object".
     if(other->name == "other_object")
         std::cout<<"TOUCHING "<<other->name.c_str()<<" ";
 }
