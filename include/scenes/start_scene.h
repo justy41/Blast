@@ -28,8 +28,8 @@ public:
         player->add_component(new TransformComponent(120, 50, 0, 1, 1));
         player->add_component(new BoxCollider2D(16, 16));
         player->add_component(new SpriteRenderer(RESOURCES_PATH "cat.png"));
-        player->add_component(new Rigidbody2D(0, 0, 0));
-        player->add_component(new PlayerMovement(180, 500));
+        player->add_component(new Rigidbody2D(0, 0, 1500));
+        player->add_component(new PlayerMovement(180, 800, 250));
         
         other_object = create_gameobject("other_object");
         other_object->add_component(new TransformComponent(200, 60, 0, 1, 1));
@@ -61,7 +61,10 @@ public:
     void draw() override {
         ClearBackground(YELLOW);
         Scene::draw();
+        
+        // Calling this function draws the LDtk map
         ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map();
-        // ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers();
+        // Pressing F10 shows the collision layers colliders
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers();
     }
 };

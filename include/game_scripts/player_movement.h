@@ -16,8 +16,10 @@ public:
     
     float speed;
     float acc;
+    float jump_force;
+    float initial_gravity;
     
-    PlayerMovement(float speed, float acc);
+    PlayerMovement(float speed, float acc, float jump_force);
     void start() override;
     void update(float deltaTime) override;
     void on_collision_enter_2d(GameObject* other) override;

@@ -1,4 +1,5 @@
 #include "components/ldtk_world_component.h"
+#include "components/box_collider2d.h"
 
 LDtkWorldComponent::LDtkWorldComponent(const char* tilemap_path, float fixed_tile_size, std::vector<std::string> collision_layer_names) {
     ldtkProject.loadFromFile(tilemap_path);
@@ -58,7 +59,13 @@ LDtkWorldComponent::LDtkWorldComponent(const char* tilemap_path, float fixed_til
 }
 
 void LDtkWorldComponent::start() {
-    
+    for(auto& [name, obj] : gameobject->scene->gameobjects) {
+        if(obj != nullptr && obj.get() != gameobject) {
+            if(obj->has_component<BoxCollider2D>()) {
+                obj->get_component<BoxCollider2D>()->ldtk_world = this;
+            }
+        }
+    }
 }
 
 void LDtkWorldComponent::update(float deltaTime) {
@@ -127,13 +134,36 @@ void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name) {
 }
 
 void LDtkWorldComponent::draw_ldtk_collision_layers() {
-    if(IsKeyPressed(KEY_F10)) {
-        ldtk_debug = !ldtk_debug;
-    }
-    
-    if(ldtk_debug && !collisions_layer.empty()) {
+    if(gameobject->scene->debug_mode && !collisions_layer.empty()) {
         for(auto tile : collisions_layer) {
             DrawRectangleLinesEx(Rectangle{tile.first.first*tile_size, tile.first.second*tile_size, tile_size, tile_size}, 2, RED);
         }
     }
 }
+
+// ############################################### LDTK MAP COLLISIONS ############################################### //
+
+// Function that returns the tiles around the player.
+// This way we can have large worlds and the collisions will work properly because we are checking only the tiles around the gameobject.
+std::vector<Vector2> LDtkWorldComponent::tiles_around(Vector2 pos, float tile_size, std::unordered_map<std::pair<float, float>, bool, FloatPairHash> collisions_layer) {
+    std::vector<Vector2> tiles;
+    Vector2 tile_loc = Vector2{std::floor(pos.x / tile_size), std::floor(pos.y / tile_size)}; // Converting the pos to tile location
+    for(auto offset : NEIGHBOUR_OFFSETS) { // Checking for all the neighbours
+        Vector2 check_loc = Vector2{tile_loc.x + offset.x, tile_loc.y + offset.y};
+        if(collisions_layer[std::make_pair(check_loc.x, check_loc.y)] == true) {
+            tiles.push_back(check_loc);
+        }
+    }
+    
+    return tiles;
+}
+
+// Function that returns the Rectangles of the tiles around the player to be used for collision resolution in the BoxCollider2D.
+std::vector<Rectangle> LDtkWorldComponent::physics_rects_around(Vector2 pos) {
+    std::vector<Rectangle> rects;
+    for(auto tile : tiles_around(pos, tile_size, collisions_layer)) {
+        rects.push_back(Rectangle{tile.x*tile_size, tile.y*tile_size, tile_size, tile_size});
+    }
+    return rects;
+}
+// ################################################################################################################### //

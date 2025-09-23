@@ -17,6 +17,18 @@ struct FloatPairHash {
     }
 };
 
+inline std::vector<Vector2> NEIGHBOUR_OFFSETS = {
+    Vector2{-1, 1},
+    Vector2{0, 1},
+    Vector2{1, 1},
+    Vector2{-1, 0},
+    Vector2{0, 0},
+    Vector2{1, 0},
+    Vector2{-1, -1},
+    Vector2{0, -1},
+    Vector2{1, -1}
+};
+
 class SceneManager;
 class Scene;
 class GameObject;
@@ -222,10 +234,6 @@ public:
             }
         }
     }
-    
-    // ############################################### LDtk ############################################### //
-    
-    // #################################################################################################### //
 };
 
 class SceneManager {

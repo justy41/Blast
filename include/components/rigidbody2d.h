@@ -6,10 +6,13 @@
 #include "engine.h"
 #include "components/transform_component.h"
 
+class BoxCollider2D;
+
 class Rigidbody2D : public Component {
 private:
 public:
     TransformComponent* transform;
+    BoxCollider2D* collider;
     Vector2 velocity;
     float gravity;
     

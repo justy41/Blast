@@ -1,13 +1,15 @@
 #include "game_scripts/player_movement.h"
 
-PlayerMovement::PlayerMovement(float speed, float acc) {
+PlayerMovement::PlayerMovement(float speed, float acc, float jump_force) {
     this->speed = speed;
     this->acc = acc;
+    this->jump_force = jump_force;
 }
 
 void PlayerMovement::start() {
     transform = gameobject->get_component<TransformComponent>();
     rb = gameobject->get_component<Rigidbody2D>();
+    initial_gravity = rb->gravity;
 }
 
 void PlayerMovement::update(float deltaTime) {
@@ -30,6 +32,17 @@ void PlayerMovement::update(float deltaTime) {
         }
         else {
             rb->velocity.y = MoveTowards(rb->velocity.y, 0, acc*deltaTime);
+        }
+        
+        if(rb->velocity.y < 0) {
+            rb->gravity = 0;
+        }
+        else {
+            rb->gravity = initial_gravity;
+        }
+        
+        if(IsKeyPressed(KEY_Z)) {
+            rb->velocity.y = -jump_force;
         }
     }
 }

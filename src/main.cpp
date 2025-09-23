@@ -69,6 +69,9 @@ int main() {
         scale = std::min((float)GetScreenWidth()/gameW, (float)GetScreenHeight()/gameH);
         sm.update(GetFrameTime());
         
+        if(IsKeyPressed(KEY_F10))
+            sm.get_current_scene()->debug_mode = !sm.get_current_scene()->debug_mode;
+        
         // Draw
         //----------------------------------------------------------------------------------
         BeginTextureMode(target);
