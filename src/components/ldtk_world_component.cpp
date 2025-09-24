@@ -97,7 +97,7 @@ void LDtkWorldComponent::draw_ldtk_map(int offset[2]) {
     }
 }
 
-void LDtkWorldComponent::draw_ldtk_level(const char* level_name) {
+void LDtkWorldComponent::draw_ldtk_level(const char* level_name, int offset[2]) {
     for(int i = world->getLevel(level_name).allLayers().size()-1; i>=0; i--) {
         if(world->getLevel(level_name).allLayers()[i].getType() != ldtk::LayerType::Entities) {
             std::string ts_name = world->getLevel(level_name).allLayers()[i].getTileset().name;
@@ -107,7 +107,7 @@ void LDtkWorldComponent::draw_ldtk_level(const char* level_name) {
                     DrawTextureRec(
                         tilesets[ts_name],
                         Rectangle{(float)r.x, (float)r.y, (float)r.width, (float)r.height},
-                        Vector2{(float)tile.getPosition().x, (float)tile.getPosition().y},
+                        Vector2{(float)tile.getPosition().x - offset[0], (float)tile.getPosition().y - offset[1]},
                         WHITE
                     );
                 }
@@ -116,7 +116,7 @@ void LDtkWorldComponent::draw_ldtk_level(const char* level_name) {
     }
 }
 
-void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name) {
+void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name, int offset[2]) {
     for(const auto& level : world->allLevels()) {
         std::string ts_name = level.getLayer(layer_name).getTileset().name;
         if(level.getLayer(layer_name).isVisible()) {
@@ -125,7 +125,7 @@ void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name) {
                 DrawTextureRec(
                     tilesets[ts_name],
                     Rectangle{(float)r.x, (float)r.y, (float)r.width, (float)r.height},
-                    Vector2{(float)tile.getPosition().x + level.position.x, (float)tile.getPosition().y + level.position.y},
+                    Vector2{(float)tile.getPosition().x + level.position.x - offset[0], (float)tile.getPosition().y + level.position.y - offset[1]},
                     WHITE
                 );
             }
@@ -133,10 +133,10 @@ void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name) {
     }
 }
 
-void LDtkWorldComponent::draw_ldtk_collision_layers() {
+void LDtkWorldComponent::draw_ldtk_collision_layers(int offset[2]) {
     if(gameobject->scene->debug_mode && !collisions_layer.empty()) {
         for(auto tile : collisions_layer) {
-            DrawRectangleLinesEx(Rectangle{tile.first.first*tile_size, tile.first.second*tile_size, tile_size, tile_size}, 2, RED);
+            DrawRectangleLinesEx(Rectangle{tile.first.first*tile_size - offset[0], tile.first.second*tile_size - offset[1], tile_size, tile_size}, 2, RED);
         }
     }
 }

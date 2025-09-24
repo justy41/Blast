@@ -109,6 +109,6 @@ void BoxCollider2D::update(float deltaTime) {
 
 void BoxCollider2D::draw(int offset[2]) {
     if(rect.width != 0 && gameobject->scene->debug_mode) {
-        DrawRectangleLinesEx(rect, 2, GREEN);
+        DrawRectangleLinesEx(Rectangle{rect.x - offset[0], rect.y - offset[1], rect.width, rect.height}, 2, GREEN);
     }
 }

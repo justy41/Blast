@@ -17,7 +17,7 @@
 class StartScene : public Scene {
 private:
 public:
-    GameObject* player;
+    GameObject* player; TransformComponent* player_transform;
     GameObject* other_object;
     GameObject* ldtk_world;
     
@@ -39,12 +39,27 @@ public:
         ldtk_world = create_gameobject("ldtk_world");
         ldtk_world->add_component(new LDtkWorldComponent(RESOURCES_PATH "tilemaps/map_0.ldtk", 16, {"Ground", "Snow"}));
         
+        
+        
+        player_transform = player->get_component<TransformComponent>();
+        camera.set_target(
+            player_transform->position.x,
+            player_transform->position.y,
+            1
+        );
+        
         Scene::start();
     }
     
     // Runs every frame
     void update(float deltaTime) override {
         Scene::update(deltaTime);
+        
+        camera.set_target(
+            player_transform->position.x,
+            player_transform->position.y,
+            30
+        );
         
         // This is how you can switch scenes
         if(IsKeyPressed(KEY_ENTER)) {
@@ -63,8 +78,8 @@ public:
         Scene::draw();
         
         // Calling this function draws the LDtk map
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map(camera.scroll);
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map(camera.render_scroll);
         // Pressing F10 shows the collision layers colliders
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers();
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers(camera.render_scroll);
     }
 };

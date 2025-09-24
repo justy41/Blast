@@ -41,13 +41,22 @@ class GameObject;
 class BlastCamera {
 private:
 public:
-    int scroll[2] = {0, 0};
+    float scroll[2] = {0, 0};
+    int render_scroll[2] = {0, 0};
     float target_x = 0, target_y = 0;
+    float damp = 1;
     
     BlastCamera() = default;
-    void set_target(float x, float y) {
+    void set_target(float x, float y, float damp) {
         target_x = x;
         target_y = y;
+        this->damp = damp;
+    }
+    void reset() {
+        scroll[0] = 0; scroll[1] = 0;
+        render_scroll[0] = 0; render_scroll[1] = 0;
+        target_x = 0; target_y = 0;
+        damp = 1;
     }
     virtual ~BlastCamera() = default;
 };
@@ -237,8 +246,10 @@ public:
             }
         }
         
-        camera.scroll[0] += (camera.target_x - GAME_WIDTH/2 - camera.scroll[0]);
-        camera.scroll[1] += (camera.target_y - GAME_HEIGHT/2 - camera.scroll[1]);
+        camera.scroll[0] += (camera.target_x - GAME_WIDTH/2 - camera.scroll[0])/camera.damp;
+        camera.scroll[1] += (camera.target_y - GAME_HEIGHT/2 - camera.scroll[1])/camera.damp;
+        camera.render_scroll[0] = (int)camera.scroll[0];
+        camera.render_scroll[1] = (int)camera.scroll[1];
     }
     
     virtual void late_update(float deltaTime) {
@@ -255,7 +266,7 @@ public:
     virtual void draw() {
         for(auto& obj : gameobjects) {
             if(obj.second->active) {
-                obj.second->draw(camera.scroll);
+                obj.second->draw(camera.render_scroll);
             }
         }
     }
@@ -292,6 +303,7 @@ public:
         if(can_switch) {
             scenes[current_scene_index]->gameobjects.clear();
             scenes[current_scene_index]->gameobjects_to_remove.clear();
+            scenes[current_scene_index]->camera.reset();
             
             current_scene_index = other_scene_index;
             scenes[current_scene_index]->start();
