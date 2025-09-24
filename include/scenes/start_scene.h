@@ -13,7 +13,7 @@
 #include "game_scripts/player_movement.h"
 #include "components/ldtk_world_component.h"
 
-// TODO: add a camera to be able to follow the player.
+// TODO: add a camera to be able to follow the player. Set the player as its target.
 class StartScene : public Scene {
 private:
 public:
@@ -63,7 +63,7 @@ public:
         Scene::draw();
         
         // Calling this function draws the LDtk map
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map();
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map(camera.scroll);
         // Pressing F10 shows the collision layers colliders
         ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers();
     }

@@ -30,13 +30,11 @@ void PlayerMovement::update(float deltaTime) {
             rb->gravity = 1; // Dont make this 0 or the "down" collision check will jumble up.
                              // It's usually good to keep it 1 as it still pushes the gameobject a bit into the ground.
             
-            std::cout<<true;
             if(IsKeyPressed(KEY_Z)) {
                 rb->velocity.y = -jump_force;
             }
         }
         else {
-            std::cout<<false;
             if(rb->velocity.y < 0) { // If not on ground and moving up (positive y goes down).
                 rb->gravity = initial_gravity;
                 

@@ -27,10 +27,10 @@ public:
     LDtkWorldComponent(const char* tilemap_path, float fixed_tile_size, std::vector<std::string> collision_layer_names);
     void start() override;
     void update(float deltaTime) override;
-    void draw() override;
+    void draw(int offset[2]) override;
     
     // Draws the entire LDtk map
-    void draw_ldtk_map();
+    void draw_ldtk_map(int offset[2]);
     // Draws only the named level
     void draw_ldtk_level(const char* level_name);
     // Draws a layer from all levels (exception is entities layer)

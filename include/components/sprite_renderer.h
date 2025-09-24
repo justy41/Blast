@@ -16,5 +16,5 @@ public:
     
     SpriteRenderer(const char* texture_path, float originX = 0, float originY = 0, Color tint = WHITE);
     void start() override;
-    void draw() override;
+    void draw(int offset[2]) override;
 };

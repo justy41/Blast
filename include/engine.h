@@ -9,6 +9,11 @@
 #include <typeindex>
 #include <typeinfo>
 
+#include "raylib.h"
+
+inline int GAME_WIDTH;
+inline int GAME_HEIGHT;
+
 struct FloatPairHash {
     std::size_t operator()(const std::pair<float, float>& p) const {
         std::size_t h1 = std::hash<float>{}(p.first);
@@ -33,6 +38,20 @@ class SceneManager;
 class Scene;
 class GameObject;
 
+class BlastCamera {
+private:
+public:
+    int scroll[2] = {0, 0};
+    float target_x = 0, target_y = 0;
+    
+    BlastCamera() = default;
+    void set_target(float x, float y) {
+        target_x = x;
+        target_y = y;
+    }
+    virtual ~BlastCamera() = default;
+};
+
 class Component {
 private:
 public:
@@ -42,7 +61,7 @@ public:
     Component() = default;
     virtual void start() {}
     virtual void update(float deltaTime) {}
-    virtual void draw() {}
+    virtual void draw(int offset[2]) {}
     virtual void on_collision_enter_2d(GameObject* other) {}
     virtual ~Component() = default;
 };
@@ -77,10 +96,10 @@ public:
         }
     }
     
-    virtual void draw() {
+    virtual void draw(int offset[2]) {
         for(auto& comp : components) {
             if(comp.second->enabled) {
-                comp.second->draw();
+                comp.second->draw(offset);
             }
         }
     }
@@ -143,6 +162,9 @@ public:
     int index = 0;
     bool debug_mode = false;
     SceneManager* manager;
+    
+    // Camera stuff
+    BlastCamera camera;
     
     Scene() {
         
@@ -214,6 +236,9 @@ public:
                 obj.second->update(deltaTime);
             }
         }
+        
+        camera.scroll[0] += (camera.target_x - GAME_WIDTH/2 - camera.scroll[0]);
+        camera.scroll[1] += (camera.target_y - GAME_HEIGHT/2 - camera.scroll[1]);
     }
     
     virtual void late_update(float deltaTime) {
@@ -230,7 +255,7 @@ public:
     virtual void draw() {
         for(auto& obj : gameobjects) {
             if(obj.second->active) {
-                obj.second->draw();
+                obj.second->draw(camera.scroll);
             }
         }
     }

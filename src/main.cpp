@@ -30,6 +30,8 @@ int main() {
     const int screenH = 720;
     int gameW = 640;
     int gameH = 360;
+    GAME_WIDTH = gameW;
+    GAME_HEIGHT = gameH;
     
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenW, screenH, "game");
@@ -41,12 +43,12 @@ int main() {
     //--------------------------------------------------------------------------------------
     
     // Camera
-    Camera2D camera = { 0 };
-    camera.target = Vector2{0, 0};
+    // Camera2D camera = { 0 };
+    // camera.target = Vector2{0, 0};
     // camera.offset = Vector2{(float)gameW/2.f, (float)gameH/2.f};
-    camera.offset = Vector2{0, 0};
-    camera.rotation = 0;
-    camera.zoom = 1.0f;
+    // camera.offset = Vector2{0, 0};
+    // camera.rotation = 0;
+    // camera.zoom = 1.0f;
     
     // ############################################################################################################################### //
     SceneManager sm = SceneManager();
@@ -77,12 +79,12 @@ int main() {
         BeginTextureMode(target);
             ClearBackground(BLACK);
         
-            BeginMode2D(camera);
+            // BeginMode2D(camera);
         
                 ClearBackground(RAYWHITE);
                 sm.get_current_scene()->draw();
                 
-            EndMode2D();
+            // EndMode2D();
             
         EndTextureMode();
         

@@ -24,5 +24,5 @@ public:
     BoxCollider2D(float width = 16, float height = 16, float rel_x = 0, float rel_y = 0);
     void start() override;
     void update(float deltaTime) override;
-    void draw() override;
+    void draw(int offset[2]) override;
 };

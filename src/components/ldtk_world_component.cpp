@@ -72,11 +72,11 @@ void LDtkWorldComponent::update(float deltaTime) {
     
 }
 
-void LDtkWorldComponent::draw() {
+void LDtkWorldComponent::draw(int offset[2]) {
     
 }
 
-void LDtkWorldComponent::draw_ldtk_map() {
+void LDtkWorldComponent::draw_ldtk_map(int offset[2]) {
     for(const auto& level : world->allLevels()) {
         for(int i = level.allLayers().size()-1; i>=0; i--) { // Reversed order because LDtkLoader takes the layers inverted.
             if(level.allLayers()[i].getType() != ldtk::LayerType::Entities) {
@@ -87,7 +87,7 @@ void LDtkWorldComponent::draw_ldtk_map() {
                         DrawTextureRec(
                             tilesets[ts_name],
                             Rectangle{(float)r.x, (float)r.y, (float)r.width, (float)r.height},
-                            Vector2{(float)tile.getPosition().x + level.position.x, (float)tile.getPosition().y + level.position.y},
+                            Vector2{(float)tile.getPosition().x + level.position.x - offset[0], (float)tile.getPosition().y + level.position.y - offset[1]},
                             WHITE
                         );
                     }
