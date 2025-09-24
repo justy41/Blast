@@ -13,8 +13,9 @@ public:
     TransformComponent* transform;
     Vector2 origin;
     Color tint;
+    float depth;
     
-    SpriteRenderer(const char* texture_path, float originX = 0, float originY = 0, Color tint = WHITE);
+    SpriteRenderer(const char* texture_path, float depth = 1, float originX = 0, float originY = 0, Color tint = WHITE);
     void start() override;
     void draw(int offset[2]) override;
 };

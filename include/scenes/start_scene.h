@@ -34,7 +34,7 @@ public:
         other_object = create_gameobject("other_object");
         other_object->add_component(new TransformComponent(200, 60, 0, 1, 1));
         other_object->add_component(new BoxCollider2D(16, 16));
-        other_object->add_component(new SpriteRenderer(RESOURCES_PATH "bird.png"));
+        other_object->add_component(new SpriteRenderer(RESOURCES_PATH "bird.png", 0.6));
         
         ldtk_world = create_gameobject("ldtk_world");
         ldtk_world->add_component(new LDtkWorldComponent(RESOURCES_PATH "tilemaps/map_0.ldtk", 16, {"Ground", "Snow"}));
@@ -47,6 +47,7 @@ public:
             player_transform->position.y,
             1
         );
+        camera.confine(0, 1280, 0, 736);
         
         Scene::start();
     }
@@ -78,7 +79,12 @@ public:
         Scene::draw();
         
         // Calling this function draws the LDtk map
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map(camera.render_scroll);
+        // ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map(camera.render_scroll);
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Ground", camera.render_scroll);
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Snow", camera.render_scroll);
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Decour_ground", camera.render_scroll);
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Decour_snow", camera.render_scroll);
+        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Parallax", camera.render_scroll, 1.09);
         // Pressing F10 shows the collision layers colliders
         ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers(camera.render_scroll);
     }

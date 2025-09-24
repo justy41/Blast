@@ -34,6 +34,13 @@ inline std::vector<Vector2> NEIGHBOUR_OFFSETS = {
     Vector2{1, -1}
 };
 
+// Increases or decreases a value until the end by an amount (usually with deltaTime)
+inline float MoveTowards(float start, float end, float amount) {
+    if(start < end) return std::fmin(start + amount, end);
+    if(start > end) return std::fmax(start - amount, end);
+    return end;
+}
+
 class SceneManager;
 class Scene;
 class GameObject;
@@ -46,17 +53,33 @@ public:
     float target_x = 0, target_y = 0;
     float damp = 1;
     
+    float left = 0, right = 0, top = 0, bottom = 0;
+    float min_x = -99999, max_x = 99999, min_y = -99999, max_y = 99999;
+    
     BlastCamera() = default;
     void set_target(float x, float y, float damp) {
         target_x = x;
         target_y = y;
         this->damp = damp;
+        
+        left = target_x - GAME_WIDTH/2;
+        right = target_x + GAME_WIDTH/2;
+        top = target_y - GAME_HEIGHT/2;
+        bottom = target_y + GAME_HEIGHT/2;
+    }
+    void confine(float min_x, float max_x, float min_y, float max_y) {
+        this->min_x = min_x;
+        this->max_x = max_x;
+        this->min_y = min_y;
+        this->max_y = max_y;
     }
     void reset() {
         scroll[0] = 0; scroll[1] = 0;
         render_scroll[0] = 0; render_scroll[1] = 0;
         target_x = 0; target_y = 0;
         damp = 1;
+        left = 0; right = 0; top = 0; bottom = 0;
+        min_x = -99999; max_x = 99999; min_y = -99999; max_y = 99999;
     }
     virtual ~BlastCamera() = default;
 };
@@ -246,8 +269,21 @@ public:
             }
         }
         
+        // Apply the scroll based on the target
         camera.scroll[0] += (camera.target_x - GAME_WIDTH/2 - camera.scroll[0])/camera.damp;
         camera.scroll[1] += (camera.target_y - GAME_HEIGHT/2 - camera.scroll[1])/camera.damp;
+        
+        // Clamp the scroll to the confine area
+        float min_scroll_x = camera.min_x;
+        float max_scroll_x = camera.max_x - GAME_WIDTH;
+        float min_scroll_y = camera.min_y;
+        float max_scroll_y = camera.max_y - GAME_HEIGHT;
+
+        if (camera.scroll[0] < min_scroll_x) camera.scroll[0] = min_scroll_x;
+        if (camera.scroll[0] > max_scroll_x) camera.scroll[0] = max_scroll_x;
+        if (camera.scroll[1] < min_scroll_y) camera.scroll[1] = min_scroll_y;
+        if (camera.scroll[1] > max_scroll_y) camera.scroll[1] = max_scroll_y;
+        
         camera.render_scroll[0] = (int)camera.scroll[0];
         camera.render_scroll[1] = (int)camera.scroll[1];
     }
@@ -314,10 +350,3 @@ public:
         get_current_scene()->late_update(deltaTime);
     }
 };
-
-// Increases or decreases a value until the end by an amount (usually with deltaTime)
-inline float MoveTowards(float start, float end, float amount) {
-    if(start < end) return std::fmin(start + amount, end);
-    if(start > end) return std::fmax(start - amount, end);
-    return end;
-}

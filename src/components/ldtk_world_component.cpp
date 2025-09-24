@@ -116,7 +116,7 @@ void LDtkWorldComponent::draw_ldtk_level(const char* level_name, int offset[2]) 
     }
 }
 
-void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name, int offset[2]) {
+void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name, int offset[2], float depth_x, float depth_y) {
     for(const auto& level : world->allLevels()) {
         std::string ts_name = level.getLayer(layer_name).getTileset().name;
         if(level.getLayer(layer_name).isVisible()) {
@@ -125,7 +125,7 @@ void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name, int offset[2]) 
                 DrawTextureRec(
                     tilesets[ts_name],
                     Rectangle{(float)r.x, (float)r.y, (float)r.width, (float)r.height},
-                    Vector2{(float)tile.getPosition().x + level.position.x - offset[0], (float)tile.getPosition().y + level.position.y - offset[1]},
+                    Vector2{(float)tile.getPosition().x + level.position.x - offset[0] * depth_x, (float)tile.getPosition().y + level.position.y - offset[1] * depth_y},
                     WHITE
                 );
             }
