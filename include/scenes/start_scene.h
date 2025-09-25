@@ -19,7 +19,7 @@ private:
 public:
     GameObject* player; TransformComponent* player_transform;
     GameObject* other_object;
-    GameObject* ldtk_world;
+    GameObject* ldtk_world; LDtkWorldComponent* ldtk_world_component;
     
     // Runs once at the start of the scene
     // Note: initilize all the variables in here
@@ -38,6 +38,7 @@ public:
         
         ldtk_world = create_gameobject("ldtk_world");
         ldtk_world->add_component(new LDtkWorldComponent(RESOURCES_PATH "tilemaps/map_0.ldtk", 16, {"Ground", "Snow"}));
+        ldtk_world_component = ldtk_world->get_component<LDtkWorldComponent>();
         
         
         
@@ -80,11 +81,11 @@ public:
         
         // Calling this function draws the LDtk map
         // ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map(camera.render_scroll);
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Ground", camera.render_scroll);
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Snow", camera.render_scroll);
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Decour_ground", camera.render_scroll);
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Decour_snow", camera.render_scroll);
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_layer("Parallax", camera.render_scroll, 1.09);
+        ldtk_world_component->draw_ldtk_layer("Ground", camera.render_scroll);
+        ldtk_world_component->draw_ldtk_layer("Snow", camera.render_scroll);
+        ldtk_world_component->draw_ldtk_layer("Decour_ground", camera.render_scroll);
+        ldtk_world_component->draw_ldtk_layer("Decour_snow", camera.render_scroll);
+        ldtk_world_component->draw_ldtk_layer("Parallax", camera.render_scroll, 1.09);
         // Pressing F10 shows the collision layers colliders
         ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers(camera.render_scroll);
     }
