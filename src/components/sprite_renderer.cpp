@@ -5,6 +5,7 @@ SpriteRenderer::SpriteRenderer(const char* texture_path, float depth, float orig
     this->depth = depth;
     origin = Vector2{originX, originY};
     this->tint = tint;
+    src = Rectangle{0, 0, (float)texture.width, (float)texture.height};
 }
 
 void SpriteRenderer::start() {
@@ -14,7 +15,7 @@ void SpriteRenderer::start() {
 void SpriteRenderer::draw(int offset[2]) {
     DrawTexturePro(
         texture,
-        Rectangle{0, 0, (float)texture.width, (float)texture.height},
+        src,
         Rectangle{transform->position.x - offset[0]*depth, transform->position.y - offset[1]*depth, texture.width*transform->scale.x, texture.height*transform->scale.y},
         origin,
         transform->rotation,

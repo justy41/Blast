@@ -12,6 +12,7 @@ public:
     Texture2D texture;
     TransformComponent* transform;
     Vector2 origin;
+    Rectangle src;
     Color tint;
     float depth;
     

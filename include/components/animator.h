@@ -13,6 +13,7 @@ private:
 public:
     int first, last, curr;
     float speed, duration_left;
+    Texture2D texture;
     
     Animation() = default;
     void update(float deltaTime);
@@ -24,10 +25,11 @@ private:
 public:
     Texture2D texture;
     TransformComponent* transform;
+    SpriteRenderer* sr;
     std::vector<Animation> animations;
     
     Animator();
-    void add_animation();
+    Animator* add_animation(const char* texture_path, int first, int last, float speed);
     void start() override;
     void update(float deltaTime) override;
     void draw(int offset[2]) override;

@@ -23,3 +23,32 @@ Rectangle Animation::get_frame(int num_frames_per_row, int cell_width, int cell_
 Animator::Animator() {
     
 }
+
+Animator* Animator::add_animation(const char* texture_path, int first, int last, float speed) {
+    Animation anim = Animation();
+    anim.texture = LoadTexture(texture_path);
+    anim.first = first;
+    anim.last = last;
+    anim.curr = first;
+    anim.speed = speed;
+    anim.duration_left = speed;
+    
+    animations.push_back(anim);
+    return this;
+}
+
+void Animator::start() {
+    sr = gameobject->get_component<SpriteRenderer>();
+}
+
+void Animator::update(float deltaTime) {
+    for(auto a : animations) {
+        a.update(deltaTime);
+    }
+}
+
+void Animator::draw(int offset[2]) {
+    if(sr != nullptr) {
+        // TODO: duplicate SpriteRenderer code or replace the source Rect and texture?
+    }
+}
