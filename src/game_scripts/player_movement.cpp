@@ -10,6 +10,7 @@ void PlayerMovement::start() {
     transform = gameobject->get_component<TransformComponent>();
     rb = gameobject->get_component<Rigidbody2D>();
     collider = gameobject->get_component<BoxCollider2D>();
+    anim = gameobject->get_component<Animator>();
     
     initial_gravity = rb->gravity;
 }
@@ -46,6 +47,15 @@ void PlayerMovement::update(float deltaTime) {
                 rb->gravity = initial_gravity * 2; // When falling apply a multiplier to make the fall faster. Feels better.
             }
         }
+        
+        if(rb->velocity.x != 0) {
+            anim->play("run");
+        }
+        else {
+            anim->play("idle");
+        }
+        
+        std::cout<<anim->current_anim->name<<" ";
     }
 }
 

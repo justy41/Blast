@@ -5,12 +5,14 @@
 #include "raylib.h"
 #include "engine.h"
 #include "components/transform_component.h"
+#include "components/animator.h"
 
 class SpriteRenderer : public Component {
 private:
 public:
     Texture2D texture;
     TransformComponent* transform;
+    Animator* anim;
     Vector2 origin;
     Rectangle src;
     Color tint;

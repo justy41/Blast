@@ -12,6 +12,7 @@
 #include "components/box_collider2d.h"
 #include "game_scripts/player_movement.h"
 #include "components/ldtk_world_component.h"
+#include "components/animator.h"
 
 // TODO: add a camera to be able to follow the player. Set the player as its target.
 class StartScene : public Scene {
@@ -27,9 +28,13 @@ public:
         player = create_gameobject("player");
         player->add_component(new TransformComponent(120, 50, 0, 1, 1));
         player->add_component(new BoxCollider2D(16, 16));
-        player->add_component(new SpriteRenderer(RESOURCES_PATH "cat.png"));
+        player->add_component(new SpriteRenderer(RESOURCES_PATH "cat.png", 1, 8, 8));
         player->add_component(new Rigidbody2D(0, 0, 750));
         player->add_component(new PlayerMovement(180, 800, 250));
+        player->add_component(new Animator());
+        player->get_component<Animator>()
+            ->add_animation(RESOURCES_PATH "cat.png", "idle", 1, 32, 32, 0.01)
+            ->add_animation(RESOURCES_PATH "animations/player_run.png", "run", 5, 32, 32, 0.06);
         
         other_object = create_gameobject("other_object");
         other_object->add_component(new TransformComponent(200, 60, 0, 1, 1));
@@ -62,6 +67,8 @@ public:
             player_transform->position.y,
             30
         );
+        
+        player->get_component<Animator>()->play("run");
         
         // This is how you can switch scenes
         if(IsKeyPressed(KEY_ENTER)) {

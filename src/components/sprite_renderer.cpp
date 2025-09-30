@@ -10,15 +10,18 @@ SpriteRenderer::SpriteRenderer(const char* texture_path, float depth, float orig
 
 void SpriteRenderer::start() {
     transform = gameobject->get_component<TransformComponent>();
+    anim = gameobject->get_component<Animator>();
 }
 
 void SpriteRenderer::draw(int offset[2]) {
-    DrawTexturePro(
-        texture,
-        src,
-        Rectangle{transform->position.x - offset[0]*depth, transform->position.y - offset[1]*depth, texture.width*transform->scale.x, texture.height*transform->scale.y},
-        origin,
-        transform->rotation,
-        tint
-    );
+    if(anim == nullptr) {
+        DrawTexturePro(
+            texture,
+            src,
+            Rectangle{transform->position.x - offset[0]*depth, transform->position.y - offset[1]*depth, texture.width*transform->scale.x, texture.height*transform->scale.y},
+            origin,
+            transform->rotation,
+            tint
+        );
+    }
 }

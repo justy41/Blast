@@ -8,6 +8,7 @@
 #include "components/transform_component.h"
 #include "components/rigidbody2d.h"
 #include "components/box_collider2d.h"
+#include "components/animator.h"
 
 class PlayerMovement : public Component {
 private:
@@ -15,6 +16,7 @@ public:
     TransformComponent* transform;
     Rigidbody2D* rb;
     BoxCollider2D* collider;
+    Animator* anim;
     
     float speed;
     float acc;
