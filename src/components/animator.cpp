@@ -26,30 +26,30 @@ Animator::Animator() {
 }
 
 Animator* Animator::add_animation(const char* texture_path, const std::string& name, int num_frames_per_row, int cell_width, int cell_height, float speed) {
-    Animation anim = Animation();
-    anim.texture = LoadTexture(texture_path);
-    anim.first = 0;
-    anim.last = num_frames_per_row-1;
-    anim.curr = anim.first;
-    anim.speed = speed;
-    anim.duration_left = speed;
-    anim.name = name;
+    auto anim = std::make_unique<Animation>();
+    anim->texture = LoadTexture(texture_path);
+    anim->first = 0;
+    anim->last = num_frames_per_row-1;
+    anim->curr = anim->first;
+    anim->speed = speed;
+    anim->duration_left = speed;
+    anim->name = name;
     
-    anim.num_frames_per_row = num_frames_per_row;
-    anim.cell_width = cell_width;
-    anim.cell_height = cell_height;
+    anim->num_frames_per_row = num_frames_per_row;
+    anim->cell_width = cell_width;
+    anim->cell_height = cell_height;
     
     auto it = animations.find(name);
     if(it != animations.end()) {
         std::cout<<"\n\nWARNING: Animations with the name "<<"'"<<name<<"'"<<" already exists\n";
     }
     else {
-        animations[name] = anim;
+        animations[name] = std::move(anim);
     }
     
     count++;
     if(count == 1) {
-        current_anim = &animations[name];
+        current_anim = animations[name].get();
     }
     
     return this;
@@ -57,22 +57,28 @@ Animator* Animator::add_animation(const char* texture_path, const std::string& n
 
 void Animator::play(const std::string& name) {
     paused = false;
-    if(animations.find(name) == animations.end()) {
+    auto it = animations.find(name);
+    if(it == animations.end()) {
         std::cout<<"\n\nWARNING: Couldn't play animation with the name "<<"'"<<name<<"'"<<"\n";
-    }
-    else {
-        current_anim = &animations[name];
+        return;
     }
     
+    if(current_anim == nullptr || current_anim->name != name) {
+        current_anim = it->second.get();
+        current_anim->curr = current_anim->first;
+        current_anim->duration_left = current_anim->speed;
+    }
 }
 
 void Animator::pause() {
     paused = true;
+    exists = true;
 }
 
 void Animator::start() {
     sr = gameobject->get_component<SpriteRenderer>();
     paused = false;
+    exists = true;
 }
 
 void Animator::update(float deltaTime) {
@@ -82,19 +88,21 @@ void Animator::update(float deltaTime) {
 }
 
 void Animator::draw(int offset[2]) {
-    if(sr != nullptr) {
-        DrawTexturePro(
-            current_anim->texture,
-            current_anim->get_frame(current_anim->num_frames_per_row, current_anim->cell_width, current_anim->cell_height),
-            Rectangle{
-                sr->transform->position.x - offset[0]*sr->depth,
-                sr->transform->position.y - offset[1]*sr->depth,
-                current_anim->cell_width*sr->transform->scale.x,
-                current_anim->cell_height*sr->transform->scale.y
-            },
-            sr->origin,
-            sr->transform->rotation,
-            sr->tint
-        );
+    if(sr == nullptr || current_anim == nullptr) {
+        return;
     }
+    
+    DrawTexturePro(
+        current_anim->texture,
+        current_anim->get_frame(current_anim->num_frames_per_row, current_anim->cell_width, current_anim->cell_height),
+        Rectangle{
+            sr->transform->position.x - offset[0]*sr->depth,
+            sr->transform->position.y - offset[1]*sr->depth,
+            (float)current_anim->cell_width * sr->transform->scale.x,
+            (float)current_anim->cell_height * sr->transform->scale.y
+        },
+        sr->origin,
+        sr->transform->rotation,
+        sr->tint
+    );
 }

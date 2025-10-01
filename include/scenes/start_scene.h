@@ -33,8 +33,9 @@ public:
         player->add_component(new PlayerMovement(180, 800, 250));
         player->add_component(new Animator());
         player->get_component<Animator>()
-            ->add_animation(RESOURCES_PATH "cat.png", "idle", 1, 32, 32, 0.01)
+            ->add_animation(RESOURCES_PATH "cat.png", "idle", 1, 32, 32, 0.1)
             ->add_animation(RESOURCES_PATH "animations/player_run.png", "run", 5, 32, 32, 0.06);
+        player->get_component<Animator>()->play("idle");
         
         other_object = create_gameobject("other_object");
         other_object->add_component(new TransformComponent(200, 60, 0, 1, 1));
@@ -68,7 +69,6 @@ public:
             30
         );
         
-        player->get_component<Animator>()->play("run");
         
         // This is how you can switch scenes
         if(IsKeyPressed(KEY_ENTER)) {

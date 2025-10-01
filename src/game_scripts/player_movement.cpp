@@ -11,6 +11,7 @@ void PlayerMovement::start() {
     rb = gameobject->get_component<Rigidbody2D>();
     collider = gameobject->get_component<BoxCollider2D>();
     anim = gameobject->get_component<Animator>();
+    dir = Vector2{0, 0};
     
     initial_gravity = rb->gravity;
 }
@@ -19,12 +20,15 @@ void PlayerMovement::update(float deltaTime) {
     if(transform != nullptr && rb != nullptr) {
         if(IsKeyDown(KEY_RIGHT)) {
             rb->velocity.x = MoveTowards(rb->velocity.x, speed, acc*deltaTime);
+            dir.x = 1;
         }
         else if(IsKeyDown(KEY_LEFT)) {
             rb->velocity.x = MoveTowards(rb->velocity.x, -speed, acc*deltaTime);
+            dir.x = -1;
         }
         else {
             rb->velocity.x = MoveTowards(rb->velocity.x, 0, acc*deltaTime);
+            dir.x = 0;
         }
         
         if(collider->collisions["down"]) {
@@ -48,14 +52,18 @@ void PlayerMovement::update(float deltaTime) {
             }
         }
         
-        if(rb->velocity.x != 0) {
-            anim->play("run");
+        // ANIMATIONS
+        if(collider->collisions["down"]) {
+            if(dir.x != 0) {
+                anim->play("run");
+            }
+            else {
+                anim->play("idle");
+            }
         }
         else {
             anim->play("idle");
         }
-        
-        std::cout<<anim->current_anim->name<<" ";
     }
 }
 

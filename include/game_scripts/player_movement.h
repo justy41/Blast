@@ -17,6 +17,7 @@ public:
     Rigidbody2D* rb;
     BoxCollider2D* collider;
     Animator* anim;
+    Vector2 dir;
     
     float speed;
     float acc;

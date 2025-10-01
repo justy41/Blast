@@ -14,14 +14,18 @@ void SpriteRenderer::start() {
 }
 
 void SpriteRenderer::draw(int offset[2]) {
-    if(anim == nullptr) {
-        DrawTexturePro(
-            texture,
-            src,
-            Rectangle{transform->position.x - offset[0]*depth, transform->position.y - offset[1]*depth, texture.width*transform->scale.x, texture.height*transform->scale.y},
-            origin,
-            transform->rotation,
-            tint
-        );
+    if(anim != nullptr && anim->exists) {
+        return;
     }
+    
+    DrawTexturePro(
+        texture,
+        src,
+        Rectangle{transform->position.x - offset[0]*depth, transform->position.y - offset[1]*depth, texture.width*transform->scale.x, texture.height*transform->scale.y},
+        origin,
+        transform->rotation,
+        tint
+    );
+    
+    // std::cout<<"The Animator is null ";
 }

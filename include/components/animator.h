@@ -3,6 +3,7 @@
 #include <cmath>
 #include <vector>
 #include <unordered_map>
+#include <memory>
 #include <string>
 
 #include "raylib.h"
@@ -28,10 +29,11 @@ class Animator : public Component {
 private:
 public:
     SpriteRenderer* sr;
-    std::unordered_map<std::string, Animation> animations;
+    std::unordered_map<std::string, std::unique_ptr<Animation>> animations;
     Animation* current_anim;
     bool paused;
     int count;
+    bool exists = false;
     
     Animator();
     Animator* add_animation(const char* texture_path, const std::string& name, int num_frames_per_row, int cell_width, int cell_height, float speed);
