@@ -9,7 +9,14 @@ void Animation::update(float deltaTime) {
         curr++;
         
         if(curr > last) {
-            curr = first; // Here it's what causes it to repeat.
+            switch(type) {
+            case REPEATING:
+                curr = first;
+                break;
+            case ONESHOT:
+                curr = last;
+                break;
+            }
         }
     }
 }
@@ -25,7 +32,7 @@ Animator::Animator() {
     count = 0;
 }
 
-Animator* Animator::add_animation(const char* texture_path, const std::string& name, int num_frames_per_row, int cell_width, int cell_height, float speed) {
+Animator* Animator::add_animation(const char* texture_path, const std::string& name, int num_frames_per_row, int cell_width, int cell_height, float speed, AnimationType type) {
     auto anim = std::make_unique<Animation>();
     anim->texture = LoadTexture(texture_path);
     anim->first = 0;
@@ -34,6 +41,7 @@ Animator* Animator::add_animation(const char* texture_path, const std::string& n
     anim->speed = speed;
     anim->duration_left = speed;
     anim->name = name;
+    anim->type = type;
     
     anim->num_frames_per_row = num_frames_per_row;
     anim->cell_width = cell_width;

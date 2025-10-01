@@ -62,7 +62,7 @@ void PlayerMovement::update(float deltaTime) {
             }
         }
         else {
-            anim->play("idle");
+            anim->play("jump");
         }
     }
 }

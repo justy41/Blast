@@ -12,6 +12,11 @@
 
 class SpriteRenderer;
 
+enum AnimationType {
+    REPEATING,
+    ONESHOT
+};
+
 class Animation {
 private:
 public:
@@ -19,6 +24,7 @@ public:
     float speed, duration_left;
     Texture2D texture;
     std::string name;
+    AnimationType type;
     
     Animation() = default;
     void update(float deltaTime);
@@ -36,7 +42,7 @@ public:
     bool exists = false;
     
     Animator();
-    Animator* add_animation(const char* texture_path, const std::string& name, int num_frames_per_row, int cell_width, int cell_height, float speed);
+    Animator* add_animation(const char* texture_path, const std::string& name, int num_frames_per_row, int cell_width, int cell_height, float speed, AnimationType type);
     void play(const std::string& name);
     void pause();
     void start() override;

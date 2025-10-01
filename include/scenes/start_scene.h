@@ -33,8 +33,9 @@ public:
         player->add_component(new PlayerMovement(180, 800, 250));
         player->add_component(new Animator());
         player->get_component<Animator>()
-            ->add_animation(RESOURCES_PATH "cat.png", "idle", 1, 32, 32, 0.1)
-            ->add_animation(RESOURCES_PATH "animations/player_run.png", "run", 5, 32, 32, 0.06);
+            ->add_animation(RESOURCES_PATH "cat.png", "idle", 1, 32, 32, 0.1, REPEATING)
+            ->add_animation(RESOURCES_PATH "animations/player_run.png", "run", 5, 32, 32, 0.06, REPEATING)
+            ->add_animation(RESOURCES_PATH "animations/player_jump.png", "jump", 6, 32, 32, 0.06, ONESHOT);
         player->get_component<Animator>()->play("idle");
         
         other_object = create_gameobject("other_object");
