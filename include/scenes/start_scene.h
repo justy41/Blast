@@ -85,16 +85,20 @@ public:
     // Runs every frame
     void draw() override {
         ClearBackground(YELLOW);
-        Scene::draw();
         
         // Calling this function draws the LDtk map
         // ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_map(camera.render_scroll);
-        ldtk_world_component->draw_ldtk_layer("Ground", camera.render_scroll);
-        ldtk_world_component->draw_ldtk_layer("Snow", camera.render_scroll);
-        ldtk_world_component->draw_ldtk_layer("Decour_ground", camera.render_scroll);
-        ldtk_world_component->draw_ldtk_layer("Decour_snow", camera.render_scroll);
-        ldtk_world_component->draw_ldtk_layer("Parallax", camera.render_scroll, 1.09);
-        // Pressing F10 shows the collision layers colliders
-        ldtk_world->get_component<LDtkWorldComponent>()->draw_ldtk_collision_layers(camera.render_scroll);
+        // ldtk_world_component->draw_ldtk_layer("Ground", camera.render_scroll);
+        // ldtk_world_component->draw_ldtk_layer("Snow", camera.render_scroll);
+        // ldtk_world_component->draw_ldtk_layer("Decour_ground", camera.render_scroll);
+        // ldtk_world_component->draw_ldtk_layer("Decour_snow", camera.render_scroll);
+        // ldtk_world_component->draw_ldtk_layer("Parallax", camera.render_scroll, 1.09);
+        
+        ldtk_world_component->draw_ldtk_layer("BG", camera.render_scroll);
+        Scene::draw();
+        ldtk_world_component->draw_ldtk_map_without_layers({"BG", "FG"}, camera.render_scroll);
+        ldtk_world_component->draw_ldtk_layer("FG", camera.render_scroll);
+        
+        ldtk_world_component->draw_ldtk_collision_layers(camera.render_scroll); // Pressing F10 shows the collision layers colliders
     }
 };

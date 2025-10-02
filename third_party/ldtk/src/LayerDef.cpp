@@ -16,6 +16,7 @@ uid(j["uid"].get<int>()),
 cell_size(j["gridSize"].get<int>()),
 opacity(j["displayOpacity"].get<float>()),
 offset(j["pxOffsetX"].get<int>(), j["pxOffsetY"].get<int>()),
+parallax(j["parallaxFactorX"].get<float>(), j["parallaxFactorY"].get<float>()),
 tile_pivot(j["tilePivotX"].get<float>(), j["tilePivotY"].get<float>()),
 m_tileset(j["tilesetDefUid"].is_null() ? nullptr : &p->getTileset(j["tilesetDefUid"].get<int>()))
 {

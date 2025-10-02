@@ -72,6 +72,8 @@
         "ratio": "cpp",
         "span": "cpp",
         "sstream": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "codecvt": "cpp",
+        "unordered_set": "cpp"
     }
 }

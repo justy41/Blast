@@ -1,7 +1,10 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <string>
+#include <unordered_set>
+#include <unordered_map>
 
 #include "raylib.h"
 #include "engine.h"
@@ -31,12 +34,20 @@ public:
     
     // Draws the entire LDtk map
     void draw_ldtk_map(int offset[2]);
+    
+    // Draws the entire LDtk map but without the specidied layers
+    // e.g. ({"Background", "Foreground"}, camera.render_scroll)
+    void draw_ldtk_map_without_layers(std::unordered_set<std::string> layers, int offset[2]);
+    
     // Draws only the named level
     void draw_ldtk_level(const char* level_name, int offset[2]);
+    
     // Draws a layer from all levels (exception is entities layer)
-    void draw_ldtk_layer(const char* layer_name, int offset[2], float depth_x = 1, float depth_y = 1);
+    void draw_ldtk_layer(const char* layer_name, int offset[2]);
+    
     // Toggle the LDtk map collision hitboxes if F10 key is pressed
     void draw_ldtk_collision_layers(int offset[2]);
+    
     Rectangle getLDtkEntity(std::string Name_field);
     
     std::vector<Vector2> tiles_around(Vector2 pos, float tile_size, std::unordered_map<std::pair<float, float>, bool, FloatPairHash> collisions_layer);

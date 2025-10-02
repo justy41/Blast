@@ -83,6 +83,10 @@ auto Layer::getOpacity() const -> float {
     return m_opacity;
 }
 
+auto Layer::getParallax() const -> const FloatPoint& {
+    return m_definition->parallax;
+}
+
 auto Layer::hasTileset() const -> bool {
     return m_override_tileset != nullptr || m_definition->m_tileset != nullptr;
 }

@@ -36,6 +36,8 @@ namespace ldtk {
         auto getOffset() const -> const IntPoint&;
 
         auto getOpacity() const -> float;
+        
+        auto getParallax() const -> const FloatPoint&;
 
         auto hasTileset() const -> bool;
         auto getTileset() const -> const Tileset&;

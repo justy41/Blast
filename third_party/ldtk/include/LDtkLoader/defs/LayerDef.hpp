@@ -23,6 +23,7 @@ namespace ldtk {
         const int cell_size;
         const float opacity;
         const IntPoint offset;
+        const FloatPoint parallax;
         const FloatPoint tile_pivot;
 
         LayerDef(const nlohmann::json& j, Project* p);

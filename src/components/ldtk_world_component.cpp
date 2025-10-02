@@ -1,9 +1,13 @@
 #include "components/ldtk_world_component.h"
 #include "components/box_collider2d.h"
+#include "json.hpp"
 
 LDtkWorldComponent::LDtkWorldComponent(const char* tilemap_path, float fixed_tile_size, std::vector<std::string> collision_layer_names) {
     ldtkProject.loadFromFile(tilemap_path);
     world = &ldtkProject.getWorld();
+    
+    std::ifstream file(tilemap_path);
+    nlohmann::json j = nlohmann::json::parse(file);
     
     tile_size = fixed_tile_size;
     for(const auto& level : world->allLevels()) {
@@ -87,7 +91,28 @@ void LDtkWorldComponent::draw_ldtk_map(int offset[2]) {
                         DrawTextureRec(
                             tilesets[ts_name],
                             Rectangle{(float)r.x, (float)r.y, (float)r.width, (float)r.height},
-                            Vector2{(float)tile.getPosition().x + level.position.x - offset[0], (float)tile.getPosition().y + level.position.y - offset[1]},
+                            Vector2{(float)tile.getPosition().x + level.position.x - offset[0]*(level.allLayers()[i].getParallax().x+1), (float)tile.getPosition().y + level.position.y - offset[1]*(level.allLayers()[i].getParallax().y+1)},
+                            WHITE
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
+void LDtkWorldComponent::draw_ldtk_map_without_layers(std::unordered_set<std::string> layers, int offset[2]) {
+    for(const auto& level : world->allLevels()) {
+        for(int i = level.allLayers().size()-1; i>=0; i--) { // Reversed order because LDtkLoader takes the layers inverted.
+            if(level.allLayers()[i].getType() != ldtk::LayerType::Entities) {
+                std::string ts_name = level.allLayers()[i].getTileset().name; // Get the tileset name of the current layer.
+                if(level.allLayers()[i].isVisible() && layers.find(level.allLayers()[i].getName()) == layers.end()) {
+                    for(const auto& tile : level.allLayers()[i].allTiles()) { // Draw all tiles based on their source rect.
+                        r = tile.getTextureRect(); // source rect
+                        DrawTextureRec(
+                            tilesets[ts_name],
+                            Rectangle{(float)r.x, (float)r.y, (float)r.width, (float)r.height},
+                            Vector2{(float)tile.getPosition().x + level.position.x - offset[0]*(level.allLayers()[i].getParallax().x+1), (float)tile.getPosition().y + level.position.y - offset[1]*(level.allLayers()[i].getParallax().y+1)},
                             WHITE
                         );
                     }
@@ -116,16 +141,17 @@ void LDtkWorldComponent::draw_ldtk_level(const char* level_name, int offset[2]) 
     }
 }
 
-void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name, int offset[2], float depth_x, float depth_y) {
+void LDtkWorldComponent::draw_ldtk_layer(const char* layer_name, int offset[2]) {
     for(const auto& level : world->allLevels()) {
         std::string ts_name = level.getLayer(layer_name).getTileset().name;
         if(level.getLayer(layer_name).isVisible()) {
+            const auto& layer = level.getLayer(layer_name);
             for(const auto& tile : level.getLayer(layer_name).allTiles()) {
                 r = tile.getTextureRect();
                 DrawTextureRec(
                     tilesets[ts_name],
                     Rectangle{(float)r.x, (float)r.y, (float)r.width, (float)r.height},
-                    Vector2{(float)tile.getPosition().x + level.position.x - offset[0] * depth_x, (float)tile.getPosition().y + level.position.y - offset[1] * depth_y},
+                    Vector2{(float)tile.getPosition().x + level.position.x - offset[0]*(layer.getParallax().x+1), (float)tile.getPosition().y + level.position.y - offset[1]*(layer.getParallax().y+1)},
                     WHITE
                 );
             }
