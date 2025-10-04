@@ -28,8 +28,8 @@ int main() {
     //--------------------------------------------------------------------------------------
     const int screenW = 1280;
     const int screenH = 720;
-    int gameW = 640;
-    int gameH = 360;
+    int gameW = 512;
+    int gameH = 288;
     GAME_WIDTH = gameW;
     GAME_HEIGHT = gameH;
     

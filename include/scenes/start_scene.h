@@ -25,8 +25,13 @@ public:
     // Runs once at the start of the scene
     // Note: initilize all the variables in here
     void start() override {
+        // Initialize the map first
+        ldtk_world = create_gameobject("ldtk_world");
+        ldtk_world->add_component(new LDtkWorldComponent(RESOURCES_PATH "tilemaps/map_0.ldtk", 16, {"Ground", "Snow"}));
+        ldtk_world_component = ldtk_world->get_component<LDtkWorldComponent>();
+        
         player = create_gameobject("player");
-        player->add_component(new TransformComponent(120, 50, 0, 1, 1));
+        player->add_component(new TransformComponent(120, 40, 0, 1, 1));
         player->add_component(new BoxCollider2D(16, 16));
         player->add_component(new SpriteRenderer(RESOURCES_PATH "cat.png", 1, 8, 8));
         player->add_component(new Rigidbody2D(0, 0, 750));
@@ -42,10 +47,6 @@ public:
         other_object->add_component(new TransformComponent(200, 60, 0, 1, 1));
         other_object->add_component(new BoxCollider2D(16, 16));
         other_object->add_component(new SpriteRenderer(RESOURCES_PATH "bird.png", 0.6));
-        
-        ldtk_world = create_gameobject("ldtk_world");
-        ldtk_world->add_component(new LDtkWorldComponent(RESOURCES_PATH "tilemaps/map_0.ldtk", 16, {"Ground", "Snow"}));
-        ldtk_world_component = ldtk_world->get_component<LDtkWorldComponent>();
         
         
         
